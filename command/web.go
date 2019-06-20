@@ -58,6 +58,12 @@ func (c *WebCmd) Run(args []string) int {
 	)
 
 	notificationSvc.SetTelegramToken(viper.GetString("notification.telegram.token"))
+	notificationSvc.SetSMTP(
+		viper.GetString("notification.email.sender"),
+		viper.GetString("notification.email.host"),
+		viper.GetString("notification.email.username"),
+		viper.GetString("notification.email.password"),
+		viper.GetInt("notification.email.port"))
 
 	job := func() {
 		result = meraxesSvc.CheckAll(hosts)

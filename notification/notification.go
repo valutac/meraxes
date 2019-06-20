@@ -10,6 +10,7 @@ import (
 	"github.com/olebedev/go-tgbot/client/messages"
 	"github.com/olebedev/go-tgbot/models"
 	"go.uber.org/zap"
+	gomail "gopkg.in/gomail.v2"
 )
 
 const (
@@ -23,16 +24,29 @@ const (
 type Service struct {
 	logger        *zap.Logger
 	telegramToken string
+	smtpSender    string
+	smtpHost      string
+	smtpPort      int
+	smtpUsername  string
+	smtpPassword  string
 }
 
 // NewService return new instance of Notfication Service
 func NewService(logger *zap.Logger) *Service {
-	return &Service{logger, ""}
+	return &Service{logger: logger}
 }
 
 // SetTelegramToken update telegram token in service
 func (s *Service) SetTelegramToken(token string) {
 	s.telegramToken = token
+}
+
+// SetSMTP update smtp config in service
+func (s *Service) SetSMTP(sender, host, username, password string, port int) {
+	s.smtpSender = sender
+	s.smtpHost = host
+	s.smtpHost = username
+	s.smtpPort = port
 }
 
 // NotifyAll send notification to user, or targets
@@ -46,10 +60,32 @@ func (s *Service) NotifyAll(statuses []meraxes.Status, targets []string, notific
 func (s *Service) Notify(statuses []meraxes.Status, target, notificationType string) error {
 	switch notificationType {
 	case TypeEmail:
-		return nil
+		return s.notifyUsingEmail(statuses, target)
 	case TypeTelegram:
 		return s.notifyUsingTelegram(statuses, target)
 	}
+	return nil
+}
+
+func (s *Service) notifyUsingEmail(statuses []meraxes.Status, target string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", s.smtpSender)
+	m.SetHeader("To", target)
+	m.SetHeader("Subject", "[Meraxes] Alert! Hosts Down")
+
+	var message = fmt.Sprintf("%d hosts down\n", len(statuses))
+	for i, status := range statuses {
+		message += fmt.Sprintf("%d. %s (%s)\n", i+1, status.Host, status.URI)
+	}
+	m.SetBody("text/html", message)
+
+	d := gomail.NewDialer(s.smtpHost, s.smtpPort, s.smtpUsername, s.smtpPassword)
+
+	if err := d.DialAndSend(m); err != nil {
+		s.logger.Error("failed to send message", zap.Error(err))
+		return err
+	}
+
 	return nil
 }
 

@@ -1,0 +1,9 @@
+config.yml
+notification/stderr.log
+notification/stdout.log
+meraxes.exe
+meraxes-darwin
+meraxes-linux
+meraxes-windows.exe
+.idea/
+releases/

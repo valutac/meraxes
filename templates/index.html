@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Meraxes</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Meraxes</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto navbar-right">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Status <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container" style="margin-top: 16px;">
+        <section>
+            <h1 class="display-4">Monitoring Results</h1>
+            <p class="text-muted">
+                Last Checked at {{ .lastRun }}<br />
+                Will be automatically checked at {{ .nextRun }}
+            </p>
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom: 8px;">
+                    <div class="float-right">
+                        <button id="trigger" class="btn btn-sm btn-primary">
+                            Check Now
+                        </button>
+                        <button id="refresh" class="btn btn-sm btn-info">
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Host</th>
+                                <th scope="col" width="90px">URI</th>
+                                <th scope="col" width="90px">Http Code</th>
+                                <th scope="col">Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .statuses}}
+                            <tr {{ if .IsError }}class="table-danger"{{ end }}>
+                                <td>{{ .Host }}</td>
+                                <td>{{ .URI }}</td>
+                                <td>{{ if .Code }}{{ .Code }}{{ else }}-{{ end }}</td>
+                                <td>{{ .Message }}</td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <script>
+        $(document).ready(function() {
+            var btnTrigger = $("#trigger");
+            var btnRefresh = $("#refresh");
+            btnTrigger.on('click', function(e) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", '/trigger', true);
+                
+                xhr.onreadystatechange = function() { // Call a function when the state changes.
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        window.location.href = '/';
+                    }
+                }
+                xhr.send();
+                e.preventDefault();
+            });
+            btnRefresh.on('click', function(e) {
+                window.location.href = '/';
+                e.preventDefault();
+            });
+        });
+    </script>
+    
+</body>
+</html>

@@ -45,7 +45,8 @@ func (s *Service) SetTelegramToken(token string) {
 func (s *Service) SetSMTP(sender, host, username, password string, port int) {
 	s.smtpSender = sender
 	s.smtpHost = host
-	s.smtpHost = username
+	s.smtpUsername = username
+	s.smtpPassword = password
 	s.smtpPort = port
 }
 

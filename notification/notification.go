@@ -74,10 +74,12 @@ func (s *Service) notifyUsingEmail(statuses []meraxes.Status, target string) err
 	m.SetHeader("To", target)
 	m.SetHeader("Subject", "[Meraxes] Alert! Hosts Down")
 
-	var message = fmt.Sprintf("%d hosts down\n", len(statuses))
-	for i, status := range statuses {
-		message += fmt.Sprintf("%d. %s (%s)\n", i+1, status.Host, status.URI)
+	var message = fmt.Sprintf("<strong>%d hosts down :(</strong>", len(statuses))
+	message += "<ul>"
+	for _, status := range statuses {
+		message += fmt.Sprintf("<li>%s (%s)</li>", status.Host, status.URI)
 	}
+	message += "</ul>"
 	m.SetBody("text/html", message)
 
 	d := gomail.NewDialer(s.smtpHost, s.smtpPort, s.smtpUsername, s.smtpPassword)

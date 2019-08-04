@@ -1,0 +1,19 @@
+hosts:
+  - https://valutac.com
+auth:
+  username: admin
+  password: ganteng
+sheduler:
+  time: 5
+notification:
+  active: false
+  email:
+    sender: ""
+    host: ""
+    username: ""
+    password: ""
+    port: 5678
+  telegram:
+    token: ""
+    target:
+      -

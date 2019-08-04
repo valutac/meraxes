@@ -1,0 +1,5578 @@
+---
+swagger: "2.0"
+info:
+  description: |
+    This is a swagger defenition for [Telegram bot API](https://core.telegram.org/bots/api).
+  version: "3.6"
+  title: Telegram bot API
+externalDocs:
+  description: Find out more about Telegram bot API
+  url: https://core.telegram.org/bots/api
+host: api.telegram.org
+schemes:
+ - https
+consumes:
+- application/json
+produces:
+- application/json
+basePath: /
+parameters:
+  token:
+    in: path
+    name: token
+    required: false
+    type: string
+    description: bot's token to authorize the request
+paths:
+  /bot{token}/getUpdates:
+    post:
+      tags:
+      - updates
+      description: ""
+      operationId: getUpdates
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: offset
+        type: integer
+        required: false
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: "#/definitions/GetUpdatesBody"
+      responses:
+        200:
+          description: An array of Updates
+          schema:
+            $ref: "#/definitions/ResponseUpdate"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setWebhook:
+    post:
+      tags:
+      - updates
+      description: ""
+      operationId: setWebhook
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: url
+        type: string
+        required: true
+      - in: formData
+        name: certificate
+        type: file
+        required: false
+      - in: formData
+        name: max_connections
+        type: integer
+        required: false
+      - in: formData
+        name: allowed_updates
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          # go-swagger bug here
+          # cannot use $ref: "#/definitions/AllowedUpdate"
+          type: string
+          enum:
+          - message
+          - edited_message
+          - channel_post
+          - edited_channel_post
+          - inline_query
+          - chosen_inline_result
+          - callback_query
+          - shipping_query
+          - pre_checkout_query
+      responses:
+        200:
+          description: Is OK?
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/deleteWebhook:
+    get:
+      tags:
+      - updates
+      description: ""
+      operationId: deleteWebhook
+      responses:
+        200:
+          description: Is OK?
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getWebhookInfo:
+    get:
+      tags:
+      - updates
+      description: ""
+      operationId: getWebhookInfo
+      responses:
+        200:
+          description: Response Body
+          schema:
+            $ref: "#/definitions/WebhookInfo"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getMe:
+    get:
+      tags:
+      - users
+      description: ""
+      operationId: getMe
+      parameters:
+      - $ref: '#/parameters/token'
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: "#/definitions/User"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendMessage:
+    post:
+      tags:
+      - messages
+      description: ""
+      operationId: sendMessage
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: "#/definitions/SendMessageBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendMessage#bytes:
+    post:
+      tags:
+      - messages
+      description: ""
+      operationId: sendMessageBytes
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: true
+        schema:
+          format: binary
+          type: string
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/forwardMessage:
+    post:
+      tags:
+      - messages
+      description: ""
+      operationId: forwardMessage
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: from_chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: message_id
+        type: integer
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendPhoto:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendPhoto
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: photo
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: caption
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: parse_mode
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendPhoto#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendPhotoLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendPhotoLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendAudio:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendAudio
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: audio
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: caption
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: parse_mode
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: duration
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: performer
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: title
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendAudio#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendAudioLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendAudioLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendDocument:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendDocument
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: document
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: caption
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: parse_mode
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendDocument#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendDocumentLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendDocumentLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendSticker:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendSticker
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: sticker
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendSticker#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendStickerLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendStickerLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVideo:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVideo
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: video
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: duration
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: width
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: height
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: caption
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: parse_mode
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVideo#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVideoLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendVideoLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVideoNote:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVideoNote
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: video_note
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: duration
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: length
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVideoNote#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVideoNoteLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendVideoNoteLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendMediaGroup#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendMediaGroupLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendMediaGroupLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVoice:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVoice
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: voice
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: caption
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: parse_mode
+        type: string
+        required: false
+        description: ""
+      - in: formData
+        name: duration
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: reply_to_message_id
+        type: integer
+        required: false
+        description: ""
+      - in: formData
+        name: reply_markup
+        type: string
+        required: false
+        description: "json string of reply_markup object"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVoice#link:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVoiceLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        required: false
+        name: body
+        description: ""
+        schema:
+          $ref: "#/definitions/SendVoiceLinkBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendLocation:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendLocation
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/SendLocationBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/editMessageLiveLocation:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: editMessageLiveLocation
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/EditMessageLiveLocationBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/stopMessageLiveLocation:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: stopMessageLiveLocation
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/StopMessageLiveLocationBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendVenue:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendVenue
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/SendVenueBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendContact:
+    post:
+      tags:
+      - attachments
+      description: ""
+      operationId: sendContact
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/SendContactBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendChatAction:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: sendChatAction
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: action
+        type: string
+        required: true
+        description: ""
+        enum:
+          - typing
+          - upload_photo
+          - record_video
+          - upload_video
+          - record_audio
+          - upload_audio
+          - upload_document
+          - find_location
+          - record_video_note
+          - upload_video_note
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getUserProfilePhotos:
+    get:
+      tags:
+      - users
+      description: ""
+      operationId: getUserProfilePhotos
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: user_id
+        type: integer
+        required: true
+        description: ""
+      - in: query
+        name: offset
+        type: integer
+        required: false
+        description: ""
+      - in: query
+        name: limit
+        type: integer
+        required: false
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: "#/definitions/UserProfilePhotos"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getFile:
+    get:
+      tags:
+      - attachments
+      description: ""
+      operationId: getFile
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: file_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: "#/definitions/File"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+
+  /bot{token}/kickChatMember:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: kickChatMember
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: user_id
+        type: integer
+        required: true
+        description: ""
+      - in: query
+        name: until_date
+        type: integer
+        required: false
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/leaveChat:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: leaveChat
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/unbanChatMember:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: unbanChatMember
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: user_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/restrictChatMember:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: restrictChatMember
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/RestrictChatMemberBody"
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/promoteChatMember:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: promoteChatMember
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/PromoteChatMemberBody"
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getChat:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: getChat
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: "#/definitions/Chat"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getChatAdministrators:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: getChatAdministrators
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                type: array
+                items:
+                  $ref: "#/definitions/ChatMember"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getChatMembersCount:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: getChatMembersCount
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                type: integer
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getChatMember:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: getChatMember
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: user_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: "#/definitions/ChatMember"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/exportChatInviteLink:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: exportChatInviteLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setChatPhoto:
+    get:
+      tags:
+      - chats
+      description: ""
+      consumes:
+      - multipart/form-data
+      operationId: setChatPhoto
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: photo
+        type: file
+        required: true
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/deleteChatPhoto:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: deleteChatPhoto
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setChatTitle:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: setChatTitle
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: title
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setChatDescription:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: setChatDescription
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: description
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/pinChatMessage:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: pinChatMessage
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      - in: query
+        name: message_id
+        type: integer
+        required: true
+        description: ""
+      - in: query
+        name: disable_notification
+        type: boolean
+        required: false
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/unpinChatMessage:
+    post:
+      tags:
+      - chats
+      description: ""
+      operationId: unpinChatMessage
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setChatStickerSet:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: setChatStickerSet
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+      - in: query
+        name: sticker_set_name
+        type: string
+        required: true
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/deleteChatStickerSet:
+    get:
+      tags:
+      - chats
+      description: ""
+      operationId: deleteChatStickerSet
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        type: string
+        required: true
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/answerCallbackQuery:
+    post:
+      tags:
+      - callbacks
+      description: ""
+      operationId: answerCallbackQuery
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/AnswerCallbackQueryBody"
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/editMessageText:
+    post:
+      tags:
+      - messages
+      description: ""
+      operationId: editMessageText
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/EditMessageTextBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                type: object
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/editMessageCaption:
+    post:
+      tags:
+      - messages
+      description: ""
+      operationId: editMessageCaption
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/EditMessageCaptionBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                type: object
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/editMessageReplyMarkup:
+    post:
+      tags:
+      - messages
+      description: ""
+      operationId: editMessageReplyMarkup
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/EditMessageReplyMarkupBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                type: object
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/deleteMessage:
+    get:
+      tags:
+      - messages
+      description: ""
+      operationId: deleteMessage
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: chat_id
+        required: true
+        description: ""
+        type: string
+      - in: query
+        name: message_id
+        required: true
+        description: ""
+        type: integer
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/answerInlineQuery:
+    post:
+      tags:
+      - inline
+      description: ""
+      operationId: answerInlineQuery
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/AnswerInlineQueryBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendGame:
+    post:
+      tags:
+      - games
+      description: ""
+      operationId: sendGame
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        description: ""
+        schema:
+          $ref: "#/definitions/SendGameBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setGameScore:
+    get:
+      tags:
+      - games
+      description: ""
+      operationId: setGameScore
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: user_id
+        type: integer
+        description: ""
+        required: true
+      - in: query
+        name: score
+        type: integer
+        description: ""
+        required: true
+      - in: query
+        name: force
+        type: boolean
+        description: ""
+        required: false
+      - in: query
+        name: disable_edit_message
+        type: boolean
+        description: ""
+        required: false
+      - in: query
+        name: chat_id
+        type: integer
+        description: ""
+        required: false
+      - in: query
+        name: message_id
+        type: integer
+        description: ""
+        required: false
+      - in: query
+        name: inline_message_id
+        type: string
+        description: ""
+        required: false
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                type: object # boolean or Message
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getGameHighScores:
+    get:
+      tags:
+      - games
+      description: ""
+      operationId: getGameHighScores
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: user_id
+        type: integer
+        description: ""
+        required: true
+      - in: query
+        name: chat_id
+        type: integer
+        description: ""
+        required: false
+      - in: query
+        name: message_id
+        type: integer
+        description: ""
+        required: false
+      - in: query
+        name: inline_message_id
+        type: string
+        description: ""
+        required: false
+
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: '#/definitions/GameHighScore'
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/sendInvoice:
+    post:
+      tags:
+      - payments
+      description: ""
+      operationId: sendInvoice
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: "#/definitions/SendInvoiceBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/answerShippingQuery:
+    post:
+      tags:
+      - payments
+      description: ""
+      operationId: answerShippingQuery
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: "#/definitions/AnswerShippingQueryBody"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseMessage"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/answerPreCheckoutQuery:
+    get:
+      tags:
+      - payments
+      description: ""
+      operationId: answerPreCheckoutQuery
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: pre_checkout_query_id
+        required: true
+        type: string
+      - in: query
+        name: ok
+        required: true
+        type: boolean
+      - in: query
+        name: error_message
+        required: false
+        type: string
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/getStickerSet:
+    get:
+      tags:
+      - stickers
+      description: ""
+      operationId: getStickerSet
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: query
+        name: name
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            type: object
+            properties:
+              result:
+                $ref: "#/definitions/StickerSet"
+              error_code:
+                type: integer
+              ok:
+                type: boolean
+              description:
+                type: string
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/uploadStickerFile:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: uploadStickerFile
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: user_id
+        type: integer
+        required: true
+        description: ""
+      - in: formData
+        name: png_sticker
+        type: file
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/File"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/uploadStickerFile#link:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: uploadStickerFileLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: user_id
+        type: integer
+        required: true
+        description: ""
+      - in: formData
+        name: png_sticker
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/File"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/createNewStickerSet:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: createNewStickerSet
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: user_id
+        type: integer
+        required: true
+        description: ""
+      - in: formData
+        name: name
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: title
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: png_sticker
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: emojis
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: is_masks
+        type: boolean
+        required: false
+        description: ""
+      - in: formData
+        name: mask_position
+        type: string
+        required: false
+        description: Serialized to JSON MaskPosition
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/File"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/createNewStickerSet#link:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: createNewStickerSetLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/CreateNewStickerSetLinkBody"
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/File"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/addStickerToSet:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: addStickerToSet
+      consumes:
+      - multipart/form-data
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: user_id
+        type: integer
+        required: true
+        description: ""
+      - in: formData
+        name: name
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: png_sticker
+        type: file
+        required: true
+        description: ""
+      - in: formData
+        name: emojis
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: mask_position
+        type: string
+        required: false
+        description: Serialized to JSON MaskPosition
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/addStickerToSet#link:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: addStickerToSetLink
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/AddStickerToSetLinkBody"
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/setStickerPositionInSet:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: setStickerPositionInSet
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: sticker
+        type: string
+        required: true
+        description: ""
+      - in: formData
+        name: position
+        type: integer
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+  /bot{token}/deleteStickerFromSet:
+    post:
+      tags:
+      - stickers
+      description: ""
+      operationId: deleteStickerFromSet
+      parameters:
+      - $ref: '#/parameters/token'
+      - in: formData
+        name: sticker
+        type: string
+        required: true
+        description: ""
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ResponseBool"
+        400:
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Not Found
+          schema:
+            $ref: "#/definitions/Error"
+        420:
+          description: Flood
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      language_code:
+        type: string
+      is_bot:
+        type: boolean
+  Chat:
+    type: object
+    required:
+    - id
+    - type
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      type:
+        type: string
+        enum:
+        - private
+        - group
+        - supergroup
+        - channel
+      title:
+        type: string
+      username:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      all_members_are_administrators:
+        type: boolean
+      photo:
+        $ref: '#/definitions/ChatPhoto'
+      description:
+        type: string
+      invite_link:
+        type: string
+      pinned_message:
+        $ref: '#/definitions/Message'
+      sticker_set_name:
+        type: string
+      can_set_sticker_set:
+        type: boolean
+  Message:
+    type: object
+    properties:
+      message_id:
+        type: integer
+      from:
+        $ref: '#/definitions/User'
+      date:
+        type: integer
+      chat:
+        $ref: '#/definitions/Chat'
+      forward_from:
+        $ref: '#/definitions/User'
+      forward_from_chat:
+        $ref: '#/definitions/Chat'
+      forward_from_message_id:
+        type: integer
+      forward_date:
+        type: integer
+      reply_to_message:
+        $ref: '#/definitions/Message'
+      edit_date:
+        type: integer
+      text:
+        type: string
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/MessageEntity'
+      caption_entities:
+        type: array
+        items:
+          $ref: '#/definitions/MessageEntity'
+      audio:
+        $ref: '#/definitions/Audio'
+      document:
+        $ref: '#/definitions/Document'
+      game:
+        $ref: '#/definitions/Game'
+      photo:
+        type: array
+        items:
+          $ref: '#/definitions/PhotoSize'
+      sticker:
+        $ref: '#/definitions/Sticker'
+      video:
+        $ref: '#/definitions/Video'
+      voice:
+        $ref: '#/definitions/Voice'
+      video_note:
+        $ref: '#/definitions/VideoNote'
+      caption:
+        type: string
+      contact:
+        $ref: '#/definitions/Contact'
+      location:
+        $ref: '#/definitions/Location'
+      venue:
+        $ref: '#/definitions/Venue'
+      new_chat_members:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      left_chat_member:
+        $ref: '#/definitions/User'
+      new_chat_title:
+        type: string
+      new_chat_photo:
+        type: array
+        items:
+          $ref: '#/definitions/PhotoSize'
+      delete_chat_photo:
+        type: boolean
+      group_chat_created:
+        type: boolean
+      supergroup_chat_created:
+        type: boolean
+      channel_chat_created:
+        type: boolean
+      migrate_to_chat_id:
+        type: integer
+      migrate_from_chat_id:
+        type: integer
+      pinned_message:
+        $ref: '#/definitions/Message'
+      invoice:
+        $ref: '#/definitions/Invoice'
+      successful_payment:
+        $ref: '#/definitions/SuccessfulPayment'
+      forward_signature:
+        type: string
+      author_signature:
+        type: string
+      connected_website:
+        type: string
+  MessageEntity:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+        - mention
+        - hashtag
+        - bot_command
+        - url
+        - email
+        - bold
+        - italic
+        - code
+        - pre
+        - text_link
+        - text_mention
+      offset:
+        type: integer
+      length:
+        type: integer
+      url:
+        type: string
+      user:
+        $ref: '#/definitions/User'
+  PhotoSize:
+    type: object
+    properties:
+      file_id:
+        type: string
+      width:
+        type: integer
+      height:
+        type: integer
+      file_size:
+        type: integer
+  Audio:
+    type: object
+    properties:
+      file_id:
+        type: string
+      duration:
+        type: integer
+      performer:
+        type: string
+      title:
+        type: string
+      mime_type:
+        type: string
+      file_size:
+        type: integer
+  Document:
+    type: object
+    properties:
+      file_id:
+        type: string
+      thumb:
+        $ref: '#/definitions/PhotoSize'
+      file_name:
+        type: string
+      mime_type:
+        type: string
+      file_size:
+        type: integer
+  Sticker:
+    type: object
+    properties:
+      file_id:
+        type: string
+      width:
+        type: integer
+      height:
+        type: integer
+      thumb:
+        $ref: '#/definitions/PhotoSize'
+      emoji:
+        type: string
+      set_name:
+        type: string
+      mask_position:
+        $ref: '#/definitions/MaskPosition'
+      file_size:
+        type: integer
+  Video:
+    type: object
+    properties:
+      file_id:
+        type: string
+      width:
+        type: integer
+      height:
+        type: integer
+      duration:
+        type: integer
+      thumb:
+        $ref: '#/definitions/PhotoSize'
+      mime_type:
+        type: string
+      file_size:
+        type: integer
+  Voice:
+    type: object
+    properties:
+      file_id:
+        type: string
+      duration:
+        type: integer
+      mime_type:
+        type: string
+      file_size:
+        type: integer
+  Contact:
+    type: object
+    properties:
+      phone_number:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      user_id:
+        type: integer
+  Location:
+    type: object
+    properties:
+      longitude:
+        type: number
+      latitude:
+        type: number
+  Venue:
+    type: object
+    properties:
+      location:
+        $ref: '#/definitions/Location'
+      title:
+        type: string
+      address:
+        type: string
+      foursquare_id:
+        type: string
+  File:
+    type: object
+    properties:
+      file_id:
+        type: string
+      file_size:
+        type: integer
+      file_path:
+        type: string
+  ReplyKeyboardMarkup:
+    type: object
+    properties:
+      keyboard:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/KeyboardButton'
+      resize_keyboard:
+        type: boolean
+      one_time_keyboard:
+        type: boolean
+      selective:
+        type: boolean
+  KeyboardButton:
+    type: object
+    properties:
+      text:
+        type: string
+      request_contact:
+        type: boolean
+      request_location:
+        type: boolean
+  ReplyKeyboardRemove:
+    type: object
+    properties:
+      remove_keyboard:
+        type: boolean
+      selective:
+        type: boolean
+  InlineKeyboardMarkup:
+    type: object
+    properties:
+      inline_keyboard:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/InlineKeyboardButton'
+  InlineKeyboardButton:
+    type: object
+    properties:
+      text:
+        type: string
+      url:
+        type: string
+      callback_data:
+        type: string
+      switch_inline_query:
+        type: string
+        x-nullable: true
+      switch_inline_query_current_chat:
+        type: string
+        x-nullable: true
+      callback_game:
+        $ref: '#/definitions/CallbackGame'
+      pay:
+        type: boolean
+  CallbackQuery:
+    type: object
+    properties:
+      id:
+        type: string
+      from:
+        $ref: '#/definitions/User'
+      message:
+        $ref: '#/definitions/Message'
+      inline_message_id:
+        type: string
+      chat_instance:
+        type: string
+      data:
+        type: string
+      game_short_name:
+        type: string
+  ForceReply:
+    type: object
+    properties:
+      force_reply:
+        type: boolean
+      selective:
+        type: boolean
+  ChatMember:
+    type: object
+    required:
+    - user
+    - status
+    properties:
+      user:
+        $ref: '#/definitions/User'
+      status:
+        type: string
+        enum:
+        - creator
+        - administrator
+        - member
+        - restricted
+        - left
+        - kicked
+      until_date:
+        type: integer
+      can_be_edited:
+        type: boolean
+      can_change_info:
+        type: boolean
+      can_post_messages:
+        type: boolean
+      can_edit_messages:
+        type: boolean
+      can_delete_messages:
+        type: boolean
+      can_invite_users:
+        type: boolean
+      can_restrict_members:
+        type: boolean
+      can_pin_messages:
+        type: boolean
+      can_promote_members:
+        type: boolean
+      can_send_messages:
+        type: boolean
+      can_send_media_messages:
+        type: boolean
+      can_send_other_messages:
+        type: boolean
+      can_add_web_page_previews:
+        type: boolean
+  ResponseParameters:
+    type: object
+    properties:
+      migrate_to_chat_id:
+        type: integer
+      retry_after:
+        type: integer
+  Update:
+    type: object
+    properties:
+      update_id:
+        type: integer
+      message:
+        $ref: '#/definitions/Message'
+      edited_message:
+        $ref: '#/definitions/Message'
+      channel_post:
+        $ref: '#/definitions/Message'
+      edited_channel_post:
+        $ref: '#/definitions/Message'
+      inline_query:
+        $ref: '#/definitions/InlineQuery'
+      chosen_inline_result:
+        $ref: '#/definitions/ChosenInlineResult'
+      callback_query:
+        $ref: '#/definitions/CallbackQuery'
+      shipping_query:
+        $ref: '#/definitions/ShippingQuery'
+      pre_checkout_query:
+        $ref: '#/definitions/PreCheckoutQuery'
+  UserProfilePhotos:
+    type: object
+    properties:
+      total_count:
+        type: integer
+      photos:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/PhotoSize'
+  InputTextMessageContent:
+    type: object
+    required:
+    - message_text
+    properties:
+      message_text:
+        type: string
+      parse_mode:
+        $ref: "#/definitions/ParseMode"
+      disable_web_page_preview:
+        type: boolean
+  InputLocationMessageContent:
+    type: object
+    required:
+    - latitude
+    - longitude
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      live_period:
+        type: integer
+        minimum: 60
+        maximum: 86400
+  InputVenueMessageContent:
+    type: object
+    required:
+    - latitude
+    - longitude
+    - title
+    - address
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      title:
+        type: string
+      address:
+        type: string
+      foursquare_id:
+        type: string
+  InputContactMessageContent:
+    type: object
+    required:
+    - phone_number
+    - first_name
+    properties:
+      phone_number:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+  ChosenInlineResult:
+    type: object
+    required:
+    - result_id
+    - from
+    - query
+    properties:
+      result_id:
+        type: string
+      from:
+        $ref: '#/definitions/User'
+      location:
+        $ref: '#/definitions/Location'
+      inline_message_id:
+        type: string
+      query:
+        type: string
+  Game:
+    type: object
+    required:
+    - title
+    - description
+    - photo
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      photo:
+        type: array
+        items:
+          $ref: '#/definitions/PhotoSize'
+      text:
+        type: string
+      text_entities:
+        type: array
+        items:
+          $ref: '#/definitions/MessageEntity'
+      animation:
+        $ref: '#/definitions/Animation'
+  Animation:
+    type: object
+    required:
+    - file_id
+    properties:
+      file_id:
+        type: string
+      thumb:
+        $ref: '#/definitions/PhotoSize'
+      file_name:
+        type: string
+      mime_type:
+        type: string
+      file_size:
+        type: integer
+  GameHighScore:
+    type: object
+    properties:
+      position:
+        type: integer
+      user:
+        $ref: '#/definitions/User'
+      score:
+        type: integer
+  CallbackGame:
+    type: object
+  InlineQuery:
+    type: object
+    properties:
+      id:
+        type: string
+      from:
+        $ref: '#/definitions/User'
+      location:
+        $ref: '#/definitions/Location'
+      query:
+        type: string
+      offset:
+        type: string
+  InlineQueryResultArticle:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      title:
+        type: string
+      input_message_content:
+        type: object # one of InputMessageContent
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      url:
+        type: string
+      hide_url:
+        type: boolean
+      description:
+        type: string
+      thumb_url:
+        type: string
+      thumb_width:
+        type: integer
+      thumb_height:
+        type: integer
+    required:
+    - type
+    - id
+    - title
+    - input_message_content
+  InlineQueryResultAudio:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      audio_url:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      performer:
+        type: string
+      audio_duration:
+        type: integer
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - audio_url
+    - title
+  InlineQueryResultContact:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      phone_number:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object # one of InputMessageContent
+      thumb_url:
+        type: string
+      thumb_width:
+        type: integer
+      thumb_height:
+        type: integer
+    required:
+    - type
+    - id
+    - phone_number
+    - first_name
+  InlineQueryResultGame:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      game_short_name:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - game_short_name
+  InlineQueryResultDocument:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      document_url:
+        type: string
+      mime_type:
+        type: string
+      description:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+      thumb_url:
+        type: string
+      thumb_width:
+        type: integer
+      thumb_height:
+        type: integer
+    required:
+    - type
+    - id
+    - title
+    - document_url
+    - mime_type
+  InlineQueryResultGif:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      gif_url:
+        type: string
+      gif_width:
+        type: integer
+      gif_height:
+        type: integer
+      gif_duration:
+        type: integer
+      thumb_url:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+    required:
+    - type
+    - id
+    - gif_url
+    - thumb_url
+  InlineQueryResultLocation:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      title:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+      thumb_url:
+        type: string
+      thumb_width:
+        type: integer
+      thumb_height:
+        type: integer
+      live_period:
+        type: integer
+        minimum: 60
+        maximum: 86400
+    required:
+    - type
+    - id
+    - title
+    - latitude
+    - longitude
+  InlineQueryResultMpeg4Gif:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      mpeg4_url:
+        type: string
+      mpeg4_width:
+        type: integer
+      mpeg4_height:
+        type: integer
+      mpeg4_duration:
+        type: integer
+      thumb_url:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+    required:
+    - type
+    - id
+    - mpeg4_url
+    - thumb_url
+  InlineQueryResultPhoto:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      photo_url:
+        type: string
+      thumb_url:
+        type: string
+      photo_width:
+        type: integer
+      photo_height:
+        type: integer
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+    required:
+    - type
+    - id
+    - photo_url
+    - thumb_url
+  InlineQueryResultVenue:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      title:
+        type: string
+      address:
+        type: string
+      foursquare_id:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+      thumb_url:
+        type: string
+      thumb_width:
+        type: integer
+      thumb_height:
+        type: integer
+    required:
+    - type
+    - id
+    - title
+    - latitude
+    - longitude
+    - address
+  InlineQueryResultVideo:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      video_url:
+        type: string
+      mime_type:
+        type: string
+      thumb_url:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      video_width:
+        type: integer
+      video_height:
+        type: integer
+      video_duration:
+        type: integer
+      description:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+      input_message_content:
+        type: object
+    required:
+    - type
+    - id
+    - video_url
+    - mime_type
+    - thumb_url
+    - title
+  InlineQueryResultVoice:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      voice_url:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      voice_duration:
+        type: integer
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - voice_url
+    - title
+  InlineQueryResultCachedAudio:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      audio_file_id:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - audio_file_id
+  InlineQueryResultCachedDocument:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      document_file_id:
+        type: string
+      description:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - document_file_id
+  InlineQueryResultCachedGif:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      gif_file_id:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - gif_file_id
+  InlineQueryResultCachedMpeg4Gif:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      mpeg4_file_id:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - mpeg4_file_id
+  InlineQueryResultCachedPhoto:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      photo_file_id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - photo_file_id
+  InlineQueryResultCachedSticker:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      sticker_file_id:
+        type: string
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - sticker_file_id
+  InlineQueryResultCachedVideo:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      video_file_id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - video_file_id
+  InlineQueryResultCachedVoice:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/InlineType'
+      id:
+        type: string
+      voice_file_id:
+        type: string
+      title:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: '#/definitions/ParseMode'
+      input_message_content:
+        type: object
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+    required:
+    - type
+    - id
+    - voice_file_id
+  InlineType:
+    type: string
+    enum:
+    - article
+    - audio
+    - contact
+    - game
+    - document
+    - gif
+    - location
+    - mpeg4_gif
+    - photo
+    - venue
+    - video
+    - voice
+    - sticker
+  ResponseMessage:
+    type: object
+    properties:
+      result:
+        $ref: "#/definitions/Message"
+      error_code:
+        type: integer
+      ok:
+        type: boolean
+      description:
+        type: string
+  ResponseBool:
+    type: object
+    properties:
+      result:
+        type: boolean
+      error_code:
+        type: integer
+      ok:
+        type: boolean
+      description:
+        type: string
+  ResponseUpdate:
+    type: object
+    properties:
+      result:
+        type: array
+        items:
+          $ref: "#/definitions/Update"
+      error_code:
+        type: integer
+      ok:
+        type: boolean
+      description:
+        type: string
+  Error:
+    type: object
+    properties:
+      error_code:
+        type: integer
+      ok:
+        type: boolean
+      description:
+        type: string
+  ParseMode:
+    type: string
+    enum:
+    - Markdown
+    - Html
+  SendMessageBody:
+    type: object
+    required:
+    - chat_id
+    - text
+    properties:
+      chat_id:
+        type: object
+      text:
+        type: string
+      parse_mode:
+        $ref: "#/definitions/ParseMode"
+      disable_web_page_preview:
+        type: boolean
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendPhotoLinkBody:
+    type: object
+    required:
+    - chat_id
+    - photo
+    properties:
+      chat_id:
+        type: object
+      photo:
+        type: string
+      caption:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendAudioLinkBody:
+    type: object
+    required:
+    - chat_id
+    - audio
+    properties:
+      chat_id:
+        type: object
+      audio:
+        type: string
+      caption:
+        type: string
+      duration:
+        type: integer
+      performer:
+        type: string
+      title:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendDocumentLinkBody:
+    type: object
+    required:
+    - chat_id
+    - document
+    properties:
+      chat_id:
+        type: object
+      document:
+        type: string
+      caption:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendStickerLinkBody:
+    type: object
+    required:
+    - chat_id
+    - sticker
+    properties:
+      chat_id:
+        type: object
+      sticker:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendVideoLinkBody:
+    type: object
+    required:
+    - chat_id
+    - video
+    properties:
+      chat_id:
+        type: object
+      video:
+        type: string
+      duration:
+        type: integer
+      width:
+        type: integer
+      height:
+        type: integer
+      caption:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendVideoNoteLinkBody:
+    type: object
+    required:
+    - chat_id
+    - video_note
+    properties:
+      chat_id:
+        type: object
+      video_note:
+        type: string
+      duration:
+        type: integer
+      length:
+        type: integer
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendVoiceLinkBody:
+    type: object
+    required:
+    - chat_id
+    - voice
+    properties:
+      chat_id:
+        type: object
+      voice:
+        type: string
+      caption:
+        type: string
+      duration:
+        type: integer
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendLocationBody:
+    type: object
+    required:
+    - chat_id
+    - latitude
+    - longitude
+    properties:
+      chat_id:
+        type: object
+      latitude:
+        type: number
+      longitude:
+        type: number
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+      live_period:
+        type: integer
+        minimum: 60
+        maximum: 86400
+  EditMessageLiveLocationBody:
+    type: object
+    required:
+    - latitude
+    - longitude
+    properties:
+      chat_id:
+        type: object
+      message_id:
+        type: integer
+      inline_message_id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      reply_markup:
+        type: object
+  StopMessageLiveLocationBody:
+    type: object
+    properties:
+      chat_id:
+        type: object
+      message_id:
+        type: integer
+      inline_message_id:
+        type: string
+      reply_markup:
+        type: object
+  SendVenueBody:
+    type: object
+    required:
+    - chat_id
+    - latitude
+    - longitude
+    - title
+    - address
+    properties:
+      chat_id:
+        type: object
+      latitude:
+        type: number
+      longitude:
+        type: number
+      title:
+        type: string
+      address:
+        type: string
+      foursquare_id:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  SendContactBody:
+    type: object
+    required:
+    - chat_id
+    - phone_number
+    - first_name
+    properties:
+      chat_id:
+        type: object
+      phone_number:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  EditMessageTextBody:
+    type: object
+    required:
+    - text
+    properties:
+      chat_id:
+        type: object
+      message_id:
+        type: integer
+      inline_message_id:
+        type: string
+      text:
+        type: string
+      parse_mode:
+        $ref: "#/definitions/ParseMode"
+      disable_web_page_preview:
+        type: boolean
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+  EditMessageCaptionBody:
+    type: object
+    properties:
+      chat_id:
+        type: object
+      message_id:
+        type: integer
+      inline_message_id:
+        type: string
+      caption:
+        type: string
+      parse_mode:
+        $ref: "#/definitions/ParseMode"
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+  EditMessageReplyMarkupBody:
+    type: object
+    properties:
+      chat_id:
+        type: object
+      message_id:
+        type: integer
+      inline_message_id:
+        type: string
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+  AnswerInlineQueryBody:
+    type: object
+    required:
+    - inline_query_id
+    - results
+    properties:
+      inline_query_id:
+        type: string
+      results:
+        type: array
+        items:
+          type: object
+      cache_time:
+        type: integer
+      is_personal:
+        type: boolean
+      next_offset:
+        type: string
+      switch_pm_text:
+        type: string
+      switch_pm_parameter:
+        type: string
+  SendGameBody:
+    type: object
+    required:
+    - chat_id
+    - game_short_name
+    properties:
+      chat_id:
+        type: integer
+      game_short_name:
+        type: string
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        $ref: '#/definitions/InlineKeyboardMarkup'
+  AllowedUpdate:
+    type: string
+    enum:
+    - message
+    - edited_message
+    - channel_post
+    - edited_channel_post
+    - inline_query
+    - chosen_inline_result
+    - callback_query
+    - shipping_query
+    - pre_checkout_query
+  WebhookInfo:
+    type: object
+    required:
+    - url
+    - has_custom_certificate
+    - pending_update_count
+    properties:
+      url:
+        type: string
+      has_custom_certificate:
+        type: boolean
+      pending_update_count:
+        type: integer
+      last_error_date:
+        type: integer
+      last_error_message:
+        type: string
+      max_connections:
+        type: integer
+      allowed_updates:
+        type: array
+        items:
+          $ref: '#/definitions/AllowedUpdate'
+  VideoNote:
+    type: object
+    properties:
+      file_id:
+        type: string
+      length:
+        type: integer
+      duration:
+        type: integer
+      thumb:
+        $ref: '#/definitions/PhotoSize'
+      file_size:
+        type: integer
+  LabeledPrice:
+    type: object
+    properties:
+      label:
+        type: string
+      amount:
+        type: integer
+  Invoice:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      start_parameter:
+        type: string
+      currency:
+        type: string
+      total_amount:
+        type: integer
+  ShippingAddress:
+    type: object
+    properties:
+      country_code:
+        type: string
+      stat:
+        type: string
+      city:
+        type: string
+      street_line1:
+        type: string
+      street_line2:
+        type: string
+      post_code:
+        type: string
+  OrderInfo:
+    type: object
+    properties:
+      name:
+        type: string
+      phone_number:
+        type: string
+      email:
+        type: string
+      shipping_address:
+        $ref: '#/definitions/ShippingAddress'
+  ShippingOption:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      prices:
+        type: array
+        items:
+          $ref: '#/definitions/LabeledPrice'
+  SuccessfulPayment:
+    type: object
+    properties:
+      currency:
+        type: string
+      total_amount:
+        type: integer
+      invoice_payload:
+        type: string
+      shipping_option_id:
+        type: string
+      order_info:
+        $ref: '#/definitions/OrderInfo'
+      telegram_payment_charge_id:
+        type: string
+      provider_payment_charge_id:
+        type: string
+  ShippingQuery:
+    type: object
+    properties:
+      id:
+        type: string
+      from:
+        $ref: '#/definitions/User'
+      invoice_payload:
+        type: string
+      shipping_address:
+        $ref: '#/definitions/ShippingAddress'
+  PreCheckoutQuery:
+    type: object
+    properties:
+      id:
+        type: string
+      from:
+        $ref: '#/definitions/User'
+      currency:
+        type: string
+      total_amount:
+        type: integer
+      invoice_payload:
+        type: string
+      shipping_option_id:
+        type: string
+      order_info:
+        $ref: '#/definitions/OrderInfo'
+  SendInvoiceBody:
+    type: object
+    required:
+    - chat_id
+    - title
+    - description
+    - payload
+    - provider_token
+    - start_parameter
+    - currency
+    - prices
+    properties:
+      chat_id:
+        type: integer
+      title:
+        type: string
+      description:
+        type: string
+      payload:
+        type: string
+      provider_token:
+        type: string
+      start_parameter:
+        type: string
+      currency:
+        type: string
+      prices:
+        type: array
+        items:
+          $ref: "#/definitions/LabeledPrice"
+      provider_data:
+        type: string
+      photo_url:
+        type: string
+      photo_size:
+        type: integer
+      photo_width:
+        type: integer
+      photo_height:
+        type: integer
+      need_name:
+        type: boolean
+      need_phone_number:
+        type: boolean
+      need_email:
+        type: boolean
+      need_shipping_address:
+        type: boolean
+      is_flexible:
+        type: boolean
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+      reply_markup:
+        type: object
+  AnswerShippingQueryBody:
+    type: object
+    required:
+    - shipping_query_id
+    - ok
+    properties:
+      shipping_query_id:
+        type: string
+      ok:
+        type: boolean
+      shipping_options:
+        type: array
+        items:
+          $ref: "#/definitions/ShippingOption"
+      error_message:
+        type: string
+  ChatPhoto:
+    type: object
+    properties:
+      small_file_id:
+        type: string
+      big_file_id:
+        type: string
+  RestrictChatMemberBody:
+    type: object
+    required:
+    - chat_id
+    - user_id
+    properties:
+      chat_id:
+        type: object
+      user_id:
+        type: integer
+      until_date:
+        type: integer
+      can_send_messages:
+        type: boolean
+      can_send_media_messages:
+        type: boolean
+      can_send_other_messages:
+        type: boolean
+      can_add_web_page_previews:
+        type: boolean
+  PromoteChatMemberBody:
+    type: object
+    required:
+    - chat_id
+    - user_id
+    properties:
+      chat_id:
+        type: object
+      user_id:
+        type: integer
+      can_change_info:
+        type: boolean
+        x-nullable: true
+      can_post_messages:
+        type: boolean
+        x-nullable: true
+      can_edit_messages:
+        type: boolean
+        x-nullable: true
+      can_delete_messages:
+        type: boolean
+        x-nullable: true
+      can_invite_users:
+        type: boolean
+        x-nullable: true
+      can_restrict_members:
+        type: boolean
+        x-nullable: true
+      can_pin_messages:
+        type: boolean
+        x-nullable: true
+      can_promote_members:
+        type: boolean
+        x-nullable: true
+  MaskPosition:
+    type: object
+    properties:
+      point:
+        type: string
+        enum:
+        - forehead
+        - eyes
+        - mouth
+        - chin
+      x_shift:
+        type: number
+      y_shift:
+        type: number
+      zoom:
+        type: number
+  StickerSet:
+    type: object
+    properties:
+      name:
+        type: string
+      title:
+        type: string
+      is_masks:
+        type: boolean
+      stickers:
+        type: array
+        items:
+          $ref: "#/definitions/Sticker"
+  CreateNewStickerSetLinkBody:
+    type: object
+    required:
+    - user_id
+    - name
+    - title
+    - png_sticker
+    - emojis
+    properties:
+      user_id:
+        type: integer
+      name:
+        type: string
+      title:
+        type: string
+      png_sticker:
+        type: string
+      emojis:
+        type: string
+      is_masks:
+        type: boolean
+      mask_position:
+        $ref: "#/definitions/MaskPosition"
+  AddStickerToSetLinkBody:
+    type: object
+    required:
+    - user_id
+    - name
+    - png_sticker
+    - emojis
+    properties:
+      user_id:
+        type: integer
+      name:
+        type: string
+      png_sticker:
+        type: string
+      emojis:
+        type: string
+      mask_position:
+        $ref: "#/definitions/MaskPosition"
+  InputMediaPhoto:
+    type: object
+    required:
+      - type
+      - media
+    properties:
+      type:
+        type: string
+        x-nullable: false
+      media:
+        type: string
+        x-nullable: false
+      caption:
+        type: string
+      parse_mode:
+        $ref: "#/definitions/ParseMode"
+  InputMediaVideo:
+    type: object
+    required:
+      - type
+      - media
+    properties:
+      type:
+        type: string
+        x-nullable: false
+      media:
+        type: string
+        x-nullable: false
+      caption:
+        type: string
+      width:
+        type: integer
+      height:
+        type: integer
+      duration:
+        type: integer
+      parse_mode:
+        $ref: "#/definitions/ParseMode"
+      supports_streaming:
+        type: boolean
+  SendMediaGroupLinkBody:
+    type: object
+    required:
+      - chat_id
+      - media
+    properties:
+      chat_id:
+        type: object
+      media:
+        type: array
+        items:
+          type: object
+      disable_notification:
+        type: boolean
+      reply_to_message_id:
+        type: integer
+  GetUpdatesBody:
+    required:
+    type: object
+    properties:
+      offset:
+        type: integer
+      limit:
+        type: integer
+      timeout:
+        type: integer
+      allowed_updates:
+        type: array
+        items:
+          $ref: '#/definitions/AllowedUpdate'
+  AnswerCallbackQueryBody:
+    type: object
+    properties:
+      callback_query_id:
+        type: string
+      text:
+        type: string
+      show_alert:
+        type: boolean
+      url:
+        type: string
+      cache_time:
+        type: integer

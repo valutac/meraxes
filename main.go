@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/Valutac/meraxes/command"
 	"github.com/mitchellh/cli"
-	"github.com/ngurajeka/meraxes/command"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -15,6 +15,7 @@ func init() {
 	viper.AddConfigPath(".")
 	viper.SetDefault("server.port", 5000)
 	viper.SetDefault("sheduler.time", 60)
+	viper.SetDefault("notification.active", true)
 	_ = viper.ReadInConfig()
 }
 
@@ -45,10 +46,7 @@ func main() {
 
 	exitCode, err := commands.Run()
 	if err != nil {
-		logger.Error("error executing meraxes",
-			zap.Strings("args", os.Args),
-			zap.Error(err),
-		)
+		logger.Error("error executing meraxes", zap.Strings("args", os.Args), zap.Error(err))
 		os.Exit(1)
 	}
 

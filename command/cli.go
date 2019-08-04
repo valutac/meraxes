@@ -1,13 +1,12 @@
 package command
 
 import (
-	"strings"
-
+	"github.com/Valutac/meraxes/meraxes"
+	"github.com/Valutac/meraxes/notification"
 	"github.com/mitchellh/cli"
-	"github.com/ngurajeka/meraxes/meraxes"
-	"github.com/ngurajeka/meraxes/notification"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"strings"
 )
 
 // CheckCmd command to run the cli version of meraxes
@@ -46,9 +45,11 @@ func (c *CheckCmd) Run(args []string) int {
 	result := svc.CheckAll(hosts)
 	svc.AsTable(result)
 
-	if statuses := result.Errors(); len(statuses) > 0 {
-		notificationSvc.Notify(statuses, viper.GetString("notification.email.target"), notification.TypeEmail)
-		notificationSvc.Notify(statuses, viper.GetString("notification.telegram.target"), notification.TypeTelegram)
+	if viper.GetBool("notification.active") {
+		if statuses := result.Errors(); len(statuses) > 0 {
+			_ = notificationSvc.Notify(statuses, viper.GetString("notification.email.target"), notification.TypeEmail)
+			_ = notificationSvc.Notify(statuses, viper.GetString("notification.telegram.target"), notification.TypeTelegram)
+		}
 	}
 
 	return 0

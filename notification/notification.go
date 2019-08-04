@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ngurajeka/meraxes/meraxes"
+	"github.com/Valutac/meraxes/meraxes"
 
-	tgbot "github.com/olebedev/go-tgbot"
+	"github.com/olebedev/go-tgbot"
 	"github.com/olebedev/go-tgbot/client/messages"
 	"github.com/olebedev/go-tgbot/models"
 	"go.uber.org/zap"
-	gomail "gopkg.in/gomail.v2"
+	"gopkg.in/gomail.v2"
 )
 
 const (

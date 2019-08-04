@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Valutac/meraxes/meraxes"
+	"github.com/Valutac/meraxes/notification"
 	"github.com/carlescere/scheduler"
-	"github.com/ngurajeka/meraxes/meraxes"
-	"github.com/ngurajeka/meraxes/notification"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"

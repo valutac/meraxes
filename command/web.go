@@ -51,7 +51,7 @@ func (c *WebCmd) Run(args []string) int {
 		result  = meraxes.NewResult()
 		hosts   = viper.GetStringSlice("hosts")
 		lastRun *time.Time
-		nextRun = time.Now().Add(time.Minute * time.Duration(viper.GetInt("sheduler.time")))
+		nextRun = time.Now().Add(time.Minute * time.Duration(viper.GetInt("scheduler.time")))
 
 		meraxesSvc      = meraxes.NewService(c.logger)
 		notificationSvc = notification.NewService(c.logger)
@@ -69,7 +69,7 @@ func (c *WebCmd) Run(args []string) int {
 		result = meraxesSvc.CheckAll(hosts)
 		now := time.Now()
 		lastRun = &now
-		nextRun = now.Add(time.Minute * time.Duration(viper.GetInt("sheduler.time")))
+		nextRun = now.Add(time.Minute * time.Duration(viper.GetInt("scheduler.time")))
 		if statuses := result.Errors(); len(statuses) > 0 {
 			go notificationSvc.NotifyAll(statuses, viper.GetStringSlice("notification.email.target"), notification.TypeEmail)
 			go notificationSvc.NotifyAll(statuses, viper.GetStringSlice("notification.telegram.target"), notification.TypeTelegram)

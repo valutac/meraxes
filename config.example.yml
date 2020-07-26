@@ -3,7 +3,7 @@ hosts:
 auth:
   username: admin
   password: ganteng
-sheduler:
+scheduler:
   time: 5
 notification:
   active: false

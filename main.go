@@ -14,7 +14,7 @@ func init() {
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.SetDefault("server.port", 5000)
-	viper.SetDefault("sheduler.time", 60)
+	viper.SetDefault("scheduler.time", 60)
 	viper.SetDefault("notification.active", true)
 	_ = viper.ReadInConfig()
 }
